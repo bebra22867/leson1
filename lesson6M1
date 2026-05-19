@@ -1,0 +1,43 @@
+import requests
+import telebot
+import random, os
+from telebot.types import ReactionTypeEmoji, InlineKeyboardMarkup, InlineKeyboardButton
+# Замени 'TOKEN' на токен твоего бота
+# Этот токен ты получаешь от BotFather, чтобы бот мог работать
+bot = telebot.TeleBot("8613299840:AAEEj8c6IDY_kWop_t4zoGSMoGTW1i1mfRI")
+
+@bot.message_handler(commands=['start', 'hello'])
+def send_welcome(message):
+    bot.reply_to(message, f'Привет! Я бот который пытается спасти окружающую среду, меня зовут {bot.get_me().first_name}!')
+
+@bot.message_handler(commands=["poll"])
+def create_poll(message):
+    bot.send_message(message.chat.id, "Не большая викторина, связанная с спасением окружающей среды")
+    answer_options = ["Он распадается на микропластик, оставаясь в экосистеме.", "Он превращается в органическое удобрение, полезное для растений.", "Он испаряется под воздействием прямых солнечных лучей.", "-"]
+
+    bot.send_poll(
+        chat_id=message.chat.id,
+        question="Что происходит с большинством видов пластика, когда он попадает в почву или океан?",
+        options=answer_options,
+        type="quiz",
+        correct_option_id=1,
+        is_anonymous=False,
+    )
+
+
+@bot.poll_answer_handler()
+def handle_poll(poll):
+    # This handler can be used to log User answers and to send next poll
+    pass
+
+@bot.message_handler(commands=['disaster'])
+def send_mem(message):
+   a = random.choice(os.listdir('disaster'))
+   txt = random.choice(['Загрязнение природы разрушает планету пластиком и токсичными выбросами. Чтобы спасти Землю, действуйте осознанно: откажитесь от одноразового пластика, сортируйте мусор и сдавайте батарейки на утилизацию. Экономьте воду, свет и чаще ходите пешком. Чистое будущее планеты зависит от простых экологичных привычек каждого из нас.', 'Человечество веками разрушало экологию, но пришло время исправлять ошибки. Чистая природа начинается с ответственности каждого человека. Замените пакеты тканевым шопером, откажитесь от автомобиля в пользу велосипеда, сдавайте вторсырье на переработку. Наше будущее зависит не от глобальных программ, а от простых ежедневных решений.', 'Планета задыхается от мусора, а смог отравляет воздух городов. Изменение климата — реальная угроза для человечества. Начните спасение природы с собственного дома: выключайте воду, замените лампы на светодиодные, покупайте меньше лишнего. Каждый сбереженный ресурс сокращает вредные выбросы и сохраняет жизнь нашей хрупкой Земле.'])
+   bot.send_message(message.chat.id, txt)
+   with open(f'disaster/{a}', 'rb') as f:  
+        bot.send_photo(message.chat.id, f) 
+        bot.reply_to(message.chat.id, txt)
+
+
+bot.infinity_polling()
