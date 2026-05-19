@@ -4,7 +4,7 @@ import random, os
 from telebot.types import ReactionTypeEmoji, InlineKeyboardMarkup, InlineKeyboardButton
 # Замени 'TOKEN' на токен твоего бота
 # Этот токен ты получаешь от BotFather, чтобы бот мог работать
-bot = telebot.TeleBot("8613299840:AAEEj8c6IDY_kWop_t4zoGSMoGTW1i1mfRI")
+bot = telebot.TeleBot("")
 
 @bot.message_handler(commands=['start', 'hello'])
 def send_welcome(message):
